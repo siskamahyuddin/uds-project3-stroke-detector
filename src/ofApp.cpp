@@ -94,6 +94,7 @@ void ofApp::draw(){
     ofSetLineWidth(2);
     ofSetColor(0, 255, 0);
 
+    // draw rectangle for each face
     for(const auto& r : faces){
         ofDrawRectangle(r.x, r.y, r.width, r.height);
         ofDrawBitmapStringHighlight(
@@ -103,8 +104,9 @@ void ofApp::draw(){
     }
     ofPopStyle();
 
-    // HUD
+    // Show information
     int y = camView.getHeight() + 24;
+    // count how many faces captured
     ofDrawBitmapStringHighlight("Faces: " + ofToString(faces.size()), 20, y);
     ofDrawBitmapStringHighlight("Haar: scale=" + ofToString(scaleFactor,2) +
                                 " neighbors=" + ofToString(minNeighbors) +
