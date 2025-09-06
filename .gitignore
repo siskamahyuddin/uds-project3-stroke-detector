@@ -9,5 +9,13 @@ Thumbs.db
 
 # Build artifacts
 bin/project3Debug.app
-project3.xcodeproj/
 obj/
+bin/data/model/
+
+# Xcode related
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.pbxuser
+*.mode1v3
+*.mode2v3
