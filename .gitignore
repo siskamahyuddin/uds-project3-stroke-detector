@@ -9,4 +9,5 @@ Thumbs.db
 
 # Build artifacts
 bin/project3Debug.app
+project3.xcodeproj/
 obj/
