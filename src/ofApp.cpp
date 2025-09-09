@@ -24,18 +24,22 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    // Draw camera image
+    // Mirror everything visual from the camera/tracker (selfie-style)
+    ofPushMatrix();
+    // Flip horizontally around the left edge of the camera image
+    ofTranslate(grabber.getWidth(), 0);
+    ofScale(-1, 1);
+
+    // Draw camera image (now mirrored)
     grabber.draw(0, 0);
     
     // Draw tracker landmarks (addon’s built-in debug overlay)
     tracker.drawDebug();
 
-    // Draw all 68 points and their indices (minimal addition)
+    // Draw all 68 points and their indices (still inside mirrored space)
     {
-        // We access instances non-const because getLandmarks() is not a const method.
         auto& instances = tracker.getInstances();
         if (!instances.empty()) {
-            // Draw for every detected face (usually 1)
             for (auto& inst : instances) {
                 auto& lms = inst.getLandmarks();
                 auto pts  = lms.getImagePoints(); // std::vector<glm::vec2>, typically 68 points
@@ -46,10 +50,8 @@ void ofApp::draw(){
                     ofDrawCircle(p, 2);
                 }
 
-                // Label each landmark with its index for easy reference
-                ofSetColor(ofColor::white);
+                ofSetColor(ofColor::white); // indices
                 for (size_t i = 0; i < pts.size(); ++i) {
-                    // Small offset so the text doesn’t overlap the dot
                     ofDrawBitmapStringHighlight(ofToString(i), pts[i] + glm::vec2(4, -4));
                 }
                 ofPopStyle();
@@ -57,17 +59,19 @@ void ofApp::draw(){
         }
     }
 
-    // Draw estimated 3d pose
+    // Draw estimated 3d pose (also mirrored for consistency)
     tracker.drawDebugPose();
-    
-    // Draw text UI
-    ofDrawBitmapStringHighlight("Framerate : "+ofToString(ofGetFrameRate()), 10, 20);
-    ofDrawBitmapStringHighlight("Tracker thread framerate : "+ofToString(tracker.getThreadFps()), 10, 40);
-    
+
+    ofPopMatrix();
+    // End mirrored drawing
+
+    // HUD (not mirrored)
+    ofDrawBitmapStringHighlight("Framerate : " + ofToString(ofGetFrameRate()), 10, 20);
+    ofDrawBitmapStringHighlight("Tracker thread framerate : " + ofToString(tracker.getThreadFps()), 10, 40);
+
 // #ifndef __OPTIMIZE__
     ofSetColor(ofColor::red);
-    ofDrawBitmapString("Warning! Run this app in release mode to get proper performance!",10,60);
+    ofDrawBitmapString("Warning! Run this app in release mode to get proper performance!", 10, 60);
     ofSetColor(ofColor::white);
 // #endif
-
 }
