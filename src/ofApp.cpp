@@ -115,7 +115,7 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-    // --- Mirrored drawing for camera + overlays (selfie-like) ---
+    // Mirrored drawing for camera + overlays (selfie-like)
     ofPushMatrix();
     if (mirrorView) {
         ofTranslate(grabber.getWidth(), 0);
@@ -158,7 +158,7 @@ void ofApp::draw() {
     tracker.drawDebugPose();
 
     ofPopMatrix();
-    // --- End mirrored section ---
+    // End mirrored section
 
     // HUD / instructions (not mirrored)
     ofPushStyle();
