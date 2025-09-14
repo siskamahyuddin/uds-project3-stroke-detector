@@ -1,7 +1,10 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
-int main(){
-    ofSetupOpenGL(1280, 800, OF_WINDOW); // size + windowed
+int main() {
+    ofGLFWWindowSettings settings;
+    settings.setSize(800, 1200); // Good default for vertical layout, but can be any size.
+    settings.resizable = true;   // Allow maximizing/resizing.
+    ofCreateWindow(settings);
     ofRunApp(new ofApp());
 }

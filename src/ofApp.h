@@ -15,24 +15,30 @@ public:
     void update() override;
     void draw() override;
     void keyPressed(int key) override;
+    void windowResized(int w, int h) override;  // <-- Add this for proper event override
 
     // Camera + tracker
     ofVideoGrabber  grabber;
     ofxFaceTracker2 tracker;
 
+    // Draw 3D pose axes at the nose tip
+    void drawPoseAxesAtNose(float axisLen);
+
 private:
     // --- UI / view ---
     bool mirrorView = true;    // mirror like a selfie to reduce user confusion
 
+    // --- Fonts for UI ---
+    ofTrueTypeFont fontLarge, fontMedium, fontSmall;
+
     // --- Guide oval (where the head should be) ---
-    // Computed in setup() from camera size.
     glm::vec2 guideCenter = {0,0};
     float guideA = 100.f; // ellipse semi-axis X (pixels)
     float guideB = 140.f; // ellipse semi-axis Y (pixels)
 
     // --- Simple state machine for the flow ---
-    enum Stage { STAGE_ALIGN = 0, STAGE_HOLD_STILL, STAGE_PROMPT_SMILE, STAGE_EVALUATE };
-    Stage stage = STAGE_ALIGN;
+    enum Stage { STAGE_HOME = 0, STAGE_ALIGN, STAGE_HOLD_STILL, STAGE_PROMPT_SMILE, STAGE_EVALUATE };
+    Stage stage = STAGE_HOME;
 
     // --- Stability / calibration ---
     glm::vec2 prevCenter = {0,0};
@@ -82,4 +88,8 @@ private:
     void updateStability(const glm::vec2& center, float iod, bool insideGuide, float dt);
     void updateSmileMetrics(const std::vector<glm::vec2>& ptsDerolled, float iod);
     void resetAll();
+
+    // UI helpers
+    void drawHomeScreen();
+    void drawInstructions();
 };
